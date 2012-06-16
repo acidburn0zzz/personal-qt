@@ -2,9 +2,13 @@
 #define MAINDIALOG_H
 
 #include <QDialog>
+#include <QTime>
+#include <QTimer>
+#include <QDateTime>
+#include <QPixmap>
 
 namespace Ui {
-class MainDialog;
+    class MainDialog;
 }
 
 class MainDialog : public QDialog
@@ -17,6 +21,9 @@ public:
     
 private:
     Ui::MainDialog *ui;
+
+public slots:
+    void updateTime();
 };
 
 #endif // MAINDIALOG_H

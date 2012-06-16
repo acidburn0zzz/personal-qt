@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file>institut.png</file>
+    </qresource>
+</RCC>
