@@ -16,24 +16,10 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <QApplication>
-#include "maindialog.h"
+#ifndef CONSTANTS_H
+#define CONSTANTS_H
 
-int main(int argc, char *argv[])
-{
-    QApplication a(argc, argv);
+#define PROGRAM_VERSION "0.1alfa"
+#define DB_CONNECTION_NAME "myConnection"
 
-    a.setOrganizationDomain("ies-sabadell");
-    a.setOrganizationName("ies-sabadell");
-    a.setApplicationName("personal-qt");
-
-    // a.setWindowIcon(QIcon(":/icons/matricula-qt"));
-
-    MainDialog w;
-
-    w.importCSV();
-
-    w.show();
-    
-    return a.exec();
-}
+#endif // CONSTANTS_H

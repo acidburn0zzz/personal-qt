@@ -16,24 +16,38 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <QApplication>
-#include "maindialog.h"
+#ifndef DATABASEMANAGER_H
+#define DATABASEMANAGER_H
 
-int main(int argc, char *argv[])
+#include <QObject>
+#include <QSqlDatabase>
+#include <QSqlError>
+#include <QSqlQuery>
+#include <QFile>
+#include <QTextStream>
+#include <QDir>
+#include <QMessageBox>
+#include <QDebug>
+#include <QDesktopServices>
+#include <QIcon>
+#include <QMap>
+#include <QCoreApplication>
+
+class DatabaseManager : public QObject
 {
-    QApplication a(argc, argv);
+    Q_OBJECT
+public:
+    explicit DatabaseManager(QObject *parent = 0);
+    ~DatabaseManager();
 
-    a.setOrganizationDomain("ies-sabadell");
-    a.setOrganizationName("ies-sabadell");
-    a.setApplicationName("personal-qt");
+    bool createDB(void);
+    bool openDB(QString filePath="");
+    void closeDB();
 
-    // a.setWindowIcon(QIcon(":/icons/matricula-qt"));
+signals:
 
-    MainDialog w;
+public slots:
 
-    w.importCSV();
+};
 
-    w.show();
-    
-    return a.exec();
-}
+#endif // DATABASEMANAGER_H

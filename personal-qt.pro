@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui network
+QT       += core gui network sql
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -14,10 +14,13 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         maindialog.cpp \
-    httpdaemon.cpp
+    httpdaemon.cpp \
+    databasemanager.cpp
 
 HEADERS  += maindialog.h \
-    httpdaemon.h
+    httpdaemon.h \
+    databasemanager.h \
+    constants.h
 
 FORMS    += maindialog.ui
 

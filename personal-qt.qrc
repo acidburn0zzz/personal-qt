@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/">
         <file>institut.png</file>
+        <file>personal-qt.sql</file>
     </qresource>
 </RCC>
