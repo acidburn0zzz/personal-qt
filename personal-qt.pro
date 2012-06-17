@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -13,9 +13,11 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        maindialog.cpp
+        maindialog.cpp \
+    httpdaemon.cpp
 
-HEADERS  += maindialog.h
+HEADERS  += maindialog.h \
+    httpdaemon.h
 
 FORMS    += maindialog.ui
 

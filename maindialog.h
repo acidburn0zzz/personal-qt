@@ -6,6 +6,10 @@
 #include <QTimer>
 #include <QDateTime>
 #include <QPixmap>
+#include <QCryptographicHash>
+#include <QKeyEvent>
+
+#include "httpdaemon.h"
 
 namespace Ui {
     class MainDialog;
@@ -18,9 +22,16 @@ class MainDialog : public QDialog
 public:
     explicit MainDialog(QWidget *parent = 0);
     ~MainDialog();
-    
+
+protected:
+    bool eventFilter(QObject *object, QEvent *event);
+
+    void checkCode(void);
+
 private:
     Ui::MainDialog *ui;
+
+    HttpDaemon *httpDaemon;
 
 public slots:
     void updateTime();
