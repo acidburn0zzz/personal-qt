@@ -31,8 +31,6 @@ int main(int argc, char *argv[])
 
     MainDialog w;
 
-    w.importCSV();
-
     w.show();
     
     return a.exec();

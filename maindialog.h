@@ -42,8 +42,6 @@ public:
     explicit MainDialog(QWidget *parent = 0);
     ~MainDialog();
 
-    void importCSV(QString fileName = "resultatsConsulta.csv");
-
 protected:
     bool eventFilter(QObject *object, QEvent *event);
 
@@ -58,6 +56,7 @@ private:
 
 public slots:
     void updateTime();
+    void importCSV(QString fileName = "resultatsConsulta.csv");
 };
 
 #endif // MAINDIALOG_H

@@ -67,6 +67,10 @@ MainDialog::MainDialog(QWidget *parent) :
     ui->timeLabel->setText("");
     ui->warnLabel->setText("");
 
+    // QObject::connect(ui->btn1, SIGNAL(clicked()), this, SLOT(test()));
+    // importCSV();
+    connect(ui->importButton, SIGNAL(clicked()), this, SLOT(importCSV()));
+
     ui->wellcomeLabel->setText("Si us plau, introdueix el teu codi");
 
     ui->code->setEchoMode(QLineEdit::Password);
