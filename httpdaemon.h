@@ -26,6 +26,7 @@
 #include <QStringList>
 #include <QSqlDatabase>
 #include <QSqlQuery>
+#include <QFile>
 
 class HttpDaemon : public QTcpServer
 {
@@ -37,6 +38,8 @@ public:
 
     inline void pause() { disabled = true; }
     inline void resume() { disabled = false; }
+
+    QString getInfoPage(QString myDate);
 signals:
     
 public slots:

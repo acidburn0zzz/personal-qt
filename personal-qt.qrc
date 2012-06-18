@@ -2,5 +2,6 @@
     <qresource prefix="/">
         <file>institut.png</file>
         <file>personal-qt.sql</file>
+        <file>styles.css</file>
     </qresource>
 </RCC>

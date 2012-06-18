@@ -153,10 +153,10 @@ bool DatabaseManager::createDB()
 
 void DatabaseManager::closeDB()
 {
-    qDebug() << "Closing database";
+    // qDebug() << "Closing database";
     QSqlDatabase::database().close();
     QString connectionName = QSqlDatabase::database().connectionName();
     QSqlDatabase::removeDatabase(connectionName);
-    qDebug() << "Database closed";
+    // qDebug() << "Database closed";
 }
 

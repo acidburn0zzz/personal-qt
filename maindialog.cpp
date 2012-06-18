@@ -184,6 +184,8 @@ void MainDialog::importCSV()
     QString fileName = QFileDialog::getOpenFileName(this,
          tr("Open csv file"), "", tr("CSV Files (*.csv)"));
 
+    // Mostrar un missatge d'espera! (sinó sembla que es pengi)
+
     QFile csvFile(fileName);
 
     bool output = false;
