@@ -24,6 +24,8 @@
 #include <QDateTime>
 #include <QDebug>
 #include <QStringList>
+#include <QSqlDatabase>
+#include <QSqlQuery>
 
 class HttpDaemon : public QTcpServer
 {

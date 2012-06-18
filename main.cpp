@@ -29,6 +29,11 @@ int main(int argc, char *argv[])
 
     // a.setWindowIcon(QIcon(":/icons/matricula-qt"));
 
+    // Create seed for the random
+    // That is needed only once on application startup
+    QTime time = QTime::currentTime();
+    qsrand((uint)time.msec());
+
     MainDialog w;
 
     w.show();

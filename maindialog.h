@@ -26,6 +26,7 @@
 #include <QPixmap>
 #include <QCryptographicHash>
 #include <QKeyEvent>
+#include <QFileDialog>
 
 #include "httpdaemon.h"
 #include "databasemanager.h"
@@ -42,10 +43,14 @@ public:
     explicit MainDialog(QWidget *parent = 0);
     ~MainDialog();
 
+    // Random number between low and high
+    inline int randInt(int low, int high) { return qrand() % ((high + 1) - low) + low; }
+
 protected:
     bool eventFilter(QObject *object, QEvent *event);
 
     void checkCode(void);
+    bool IsCodeRepeated(int code);
 
     DatabaseManager dbManager;
 
@@ -56,7 +61,7 @@ private:
 
 public slots:
     void updateTime();
-    void importCSV(QString fileName = "resultatsConsulta.csv");
+    void importCSV();
 };
 
 #endif // MAINDIALOG_H

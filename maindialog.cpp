@@ -136,20 +136,66 @@ void MainDialog::checkCode()
 
     QString hashValue = QString(hash.result().toHex());
 
-    qDebug() << hashValue;
-
-    ui->warnLabel->setText(tr("El codi no és correcte!"));
-    ui->code->setText("");
-
-}
-
-void MainDialog::importCSV(QString fileName)
-{
-    qDebug() << "Importing all users from resultatsConsulta.csv";
-
     QSqlDatabase db = QSqlDatabase::database(DB_CONNECTION_NAME);
 
+    QSqlQuery qry(db);
+
+    qry.prepare("SELECT NIF,Nom FROM personal WHERE Codi = :codi");
+
+    qry.bindValue(":codi", hashValue);
+
+    qry.exec();
+
+    if (qry.next())
+    {
+        QString nif = qry.value(0).toString();
+        QString name = qry.value(1).toString();
+
+        ui->warnLabel->setText(tr("Hola %1!").arg(name));
+
+        QDate date = QDate::currentDate();
+        QString myDate = QString().sprintf("%d%02d%02d", date.year(), date.month(), date.day());
+
+        QTime time = QTime::currentTime();
+        QString myTime = QString().sprintf("%02d:%02d:%02d", time.hour(), time.minute(), time.second());
+
+        qry.clear();
+
+        qry.prepare("INSERT INTO Moviments (Codi, Data, Hora) VALUES (:codi, :data, :hora)");
+
+        qry.bindValue(":codi", hashValue);
+        qry.bindValue(":data", myDate);
+        qry.bindValue(":hora", myTime);
+
+        qry.exec();
+    }
+    else
+    {
+        ui->warnLabel->setText(tr("El codi no és correcte!"));
+    }
+
+    ui->code->setText("");
+}
+
+void MainDialog::importCSV()
+{
+    QSqlDatabase db = QSqlDatabase::database(DB_CONNECTION_NAME);
+
+    QString fileName = QFileDialog::getOpenFileName(this,
+         tr("Open csv file"), "", tr("CSV Files (*.csv)"));
+
     QFile csvFile(fileName);
+
+    bool output = false;
+
+    QFile txtFile(fileName + ".txt");
+
+    QTextStream out(&txtFile);
+
+    if (txtFile.open(QIODevice::WriteOnly | QIODevice::Text))
+    {
+        output = true;
+    }
 
     if (csvFile.open(QIODevice::ReadOnly | QIODevice::Text))
     {
@@ -158,39 +204,85 @@ void MainDialog::importCSV(QString fileName)
 
         while (!in.atEnd())
         {
-           QString line = in.readLine();
+            QString line = in.readLine();
 
-           if (!line.startsWith('#'))
-           {
-               qDebug() << line;
+            if (!line.startsWith('#'))
+            {
+                QStringList data = line.split(";");
 
-               QStringList data = line.split(";");
+                qry.prepare("INSERT INTO Personal (NIF, Nom, Codi) VALUES (:nif, :nom, :codi)");
 
-               qry.prepare("INSERT INTO Personal (NIF, Nom, Codi) VALUES (:nif, :nom, :codi)");
+                qry.bindValue(":nom", data[1]);
+                qry.bindValue(":nif", data[2]);
 
-               qry.bindValue(":nom", data[1]);
-               qry.bindValue(":nif", data[2]);
+                // Get random value between 0-100
+                int randomValue = randInt(0, 10000);
 
+                while (IsCodeRepeated(randomValue))
+                {
+                    randomValue = randInt(0, 10000);
+                }
 
+                QString codeValue = QString::number(randomValue);
 
+                QCryptographicHash hash(QCryptographicHash::Sha1);
+                hash.addData(codeValue.toUtf8());
+                qry.bindValue(":codi", QString(hash.result().toHex()));
 
-               /*
-               QCryptographicHash hash(QCryptographicHash::Sha1);
-               hash.addData(text);
-               qry.bindValue(":codi", QString(hash.result().toHex());
-               */
+                qDebug() << hash.result().toHex();
 
+                if (!qry.exec())
+                {
+                    qDebug() << line;
+                    qDebug() << codeValue;
+                    qDebug() << qry.lastError().text();
+                }
+                else
+                {
+                    qDebug() << line;
+                    qDebug() << codeValue;
 
-               if (!qry.exec())
-               {
-                   qDebug() << qry.lastError().text();
-               }
-           }
+                    if (output)
+                    {
+                        out << line + "\n";
+                        out << codeValue + "\n\n";
+                    }
+                }
+            }
         }
 
         csvFile.close();
     }
 
+    if (output)
+    {
+        txtFile.close();
+    }
+
     db.close();
 }
 
+bool MainDialog::IsCodeRepeated(int code)
+{
+    QSqlDatabase db = QSqlDatabase::database(DB_CONNECTION_NAME);
+
+    QString codeValue = QString::number(code);
+
+    QCryptographicHash hash(QCryptographicHash::Sha1);
+    hash.addData(codeValue.toUtf8());
+
+    QSqlQuery qry(db);
+
+    qry.prepare("SELECT NIF FROM Personal WHERE Codi = :codi");
+
+    qry.bindValue(":codi", QString(hash.result().toHex()));
+
+    qry.exec();
+
+    if (qry.next())
+    {
+        return true;
+    }
+
+    return false;
+}
