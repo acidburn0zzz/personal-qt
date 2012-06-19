@@ -50,6 +50,10 @@ void HttpDaemon::incomingConnection(int socket)
 
 QString HttpDaemon::getInfoPage(QString myDate)
 {
+    QDate data(QDate::fromString(myDate, "yyyyMMdd"));
+
+    QString dataString = QString().sprintf("%02d/%02d/%04d", data.day(), data.month(), data.year());
+
     QSqlDatabase db = QSqlDatabase::database(DB_CONNECTION_NAME);
 
     QSqlQuery qry(db);
@@ -77,7 +81,7 @@ QString HttpDaemon::getInfoPage(QString myDate)
 
         if (qry.next())
         {
-            os += "<h2>Dades de " + myDate + "</h2><br />\n";
+            os += "<h2>Dades de " + dataString + "</h2><br />\n";
 
             os += "<table>\n";
             os += "<tr><td>NIF</td><td>Nom</td><td>Hora</td></tr>\n";
@@ -106,7 +110,7 @@ QString HttpDaemon::getInfoPage(QString myDate)
                 else
                 {
                     // something wrong has happened. Can't find this code in db
-                    os += "<tr><td>ERROR!<tr><td>" + codi + "</td><td>" + hora + "</td></tr>\n";
+                    os += "<tr><td>ERROR!</td><td>" + codi + "</td><td>" + hora + "</td></tr>\n";
                 }
             }
             while (qry.next());
@@ -115,7 +119,7 @@ QString HttpDaemon::getInfoPage(QString myDate)
         }
         else
         {
-            os += "<h2>No hi ha dades del dia " + myDate + " </h2><br />\n";
+            os += "<h2>No hi ha dades del dia " + dataString + " </h2><br />\n";
         }
 
         os += "</body>\n";
@@ -180,15 +184,25 @@ void HttpDaemon::readClient()
                     // root, show today info
                     QDate today = QDate::currentDate();
                     myDate = QString().sprintf("%d%02d%02d", today.year(), today.month(), today.day());
+                    os << getInfoPage(myDate);
                 }
                 else
                 {
                     // remove slash
                     myDate = tokens[1].remove(0,1);
                     // should check if it's a date, if not show a message error.
-                }
 
-                os << getInfoPage(myDate);
+                    QDate data(QDate::fromString(myDate, "yyyyMMdd"));
+
+                    if (data.isValid())
+                    {
+                        os << getInfoPage(myDate);
+                    }
+                    else
+                    {
+                        os << get404Page();
+                    }
+                }
             }
 
 

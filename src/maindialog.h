@@ -62,6 +62,7 @@ private:
 public slots:
     void updateTime();
     void importCSV();
+    void clearName();
 };
 
 #endif // MAINDIALOG_H

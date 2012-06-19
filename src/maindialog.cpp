@@ -173,14 +173,40 @@ void MainDialog::checkCode()
     }
 
     ui->code->setText("");
+
+    // Timer to clear name or error message from screen
+    QTimer::singleShot(5000, this, SLOT(clearName()));
+}
+
+void MainDialog::clearName()
+{
+    ui->warnLabel->setText("");
 }
 
 void MainDialog::importCSV()
 {
+    // ATENCIÓ! el format del fitxer CSV exportat del SAGA ha de ser:
+    // id;nom;nif
+
     QSqlDatabase db = QSqlDatabase::database(DB_CONNECTION_NAME);
 
-    QString fileName = QFileDialog::getOpenFileName(this,
-         tr("Open csv file"), "", tr("CSV Files (*.csv)"));
+    QString fileName;
+
+    QFileDialog dialog(this);
+    dialog.setFileMode(QFileDialog::ExistingFile);
+    dialog.setNameFilter(tr("CSV (*.csv)"));
+    dialog.setDirectory("~");
+
+    if (dialog.exec())
+    {
+        fileName = dialog.selectedFiles()[0];
+    }
+    else
+    {
+        return;
+    }
+
+    dialog.hide();
 
     // Mostrar un missatge d'espera! (sinó sembla que es pengi)
 
@@ -197,8 +223,13 @@ void MainDialog::importCSV()
         output = true;
     }
 
+    bool error = false;
+
     if (csvFile.open(QIODevice::ReadOnly | QIODevice::Text))
     {
+        this->setCursor(Qt::WaitCursor);
+        QApplication::processEvents();
+
         QTextStream in(&csvFile);
         QSqlQuery qry(db);
 
@@ -236,6 +267,7 @@ void MainDialog::importCSV()
                     qDebug() << line;
                     qDebug() << codeValue;
                     qDebug() << qry.lastError().text();
+                    error = true;
                 }
                 else
                 {
@@ -248,10 +280,26 @@ void MainDialog::importCSV()
                         out << codeValue + "\n\n";
                     }
                 }
+
+                QCoreApplication::sendPostedEvents();
             }
         }
 
         csvFile.close();
+
+        this->setCursor(Qt::ArrowCursor);
+        QApplication::processEvents();
+
+        QMessageBox msgBox;
+        if (error)
+        {
+            msgBox.setText(tr("Algunes dades no s'han importat correctament."));
+        }
+        else
+        {
+            msgBox.setText(tr("Dades processades correctament."));
+        }
+        msgBox.exec();
     }
 
     if (output)
