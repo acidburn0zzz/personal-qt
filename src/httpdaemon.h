@@ -40,6 +40,8 @@ public:
     inline void resume() { disabled = false; }
 
     QString getInfoPage(QString myDate);
+    QString get404Page(void);
+
 signals:
     
 public slots:
