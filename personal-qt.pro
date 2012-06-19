@@ -12,17 +12,17 @@ TARGET = personal-qt
 TEMPLATE = app
 
 
-SOURCES += main.cpp\
-        maindialog.cpp \
-    httpdaemon.cpp \
-    databasemanager.cpp
+SOURCES += src/main.cpp\
+        src/maindialog.cpp \
+    src/httpdaemon.cpp \
+    src/databasemanager.cpp
 
-HEADERS  += maindialog.h \
-    httpdaemon.h \
-    databasemanager.h \
-    constants.h
+HEADERS  += src/maindialog.h \
+    src/httpdaemon.h \
+    src/databasemanager.h \
+    src/constants.h
 
-FORMS    += maindialog.ui
+FORMS    += src/maindialog.ui
 
 RESOURCES += \
     personal-qt.qrc

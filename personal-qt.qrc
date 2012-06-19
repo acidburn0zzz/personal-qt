@@ -1,7 +1,10 @@
 <RCC>
     <qresource prefix="/">
-        <file>institut.png</file>
         <file>personal-qt.sql</file>
         <file>styles.css</file>
+        <file>images/bg_header.jpg</file>
+        <file>images/bullet1.gif</file>
+        <file>images/bullet2.gif</file>
+        <file>images/institut.png</file>
     </qresource>
 </RCC>

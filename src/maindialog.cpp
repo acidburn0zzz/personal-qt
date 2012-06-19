@@ -67,8 +67,6 @@ MainDialog::MainDialog(QWidget *parent) :
     ui->timeLabel->setText("");
     ui->warnLabel->setText("");
 
-    // QObject::connect(ui->btn1, SIGNAL(clicked()), this, SLOT(test()));
-    // importCSV();
     connect(ui->importButton, SIGNAL(clicked()), this, SLOT(importCSV()));
 
     ui->wellcomeLabel->setText("Si us plau, introdueix el teu codi");
@@ -84,7 +82,7 @@ MainDialog::MainDialog(QWidget *parent) :
 
     updateTime();
 
-    ui->imageLabel->setPixmap(QPixmap(":/institut.png"));
+    ui->imageLabel->setPixmap(QPixmap(":/images/institut.png"));
 
     httpDaemon = new HttpDaemon(8080);
 }
